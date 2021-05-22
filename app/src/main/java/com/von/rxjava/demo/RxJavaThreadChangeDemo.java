@@ -45,12 +45,22 @@ public class RxJavaThreadChangeDemo implements Runnable {
             emitter.onNext("3");
             emitter.onNext("4");
             emitter.onComplete();
-        })        //将被观察者切换到子线程
+        })
+                //将被观察者切换到子线程
+                // IoScheduler#scheduleDirect
                 .subscribeOn(Schedulers.io())
-                //将观察者切换到主线程  需要在Android环境下运行
+                // 将观察者切换到主线程  需要在Android环境下运行
+                // HandlerScheduler#schedule
                 .observeOn(AndroidSchedulers.mainThread())
                 //创建观察者并订阅
                 .subscribe(observer);
+        //I/RxjavaDemo: onSubscribe thread name: Thread-2
+        //I/RxjavaDemo: thread name:RxCachedThreadScheduler-1
+        //I/RxjavaDemo: onNext: 1 thread name: main
+        //I/RxjavaDemo: onNext: 2 thread name: main
+        //I/RxjavaDemo: onNext: 3 thread name: main
+        //I/RxjavaDemo: onNext: 4 thread name: main
+        //I/RxjavaDemo: onComplete:  thread name: main
     }
 
 
